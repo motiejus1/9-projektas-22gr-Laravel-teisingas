@@ -8,7 +8,30 @@
     </button>
       
       <!-- Modal -->
-      <div class="modal fade" id="createClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      
+
+    <div id="alert" class="alert alert-success d-none">
+    </div>    
+   
+
+
+    <table id="clients-table" class="table table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Description</th>
+        </tr>
+        @foreach ($clients as $client) 
+        <tr>
+            <td>{{$client->id}}</td>
+            <td>{{$client->name}}</td>
+            <td>{{$client->surname}}</td>
+            <td>{{$client->description}}</td>
+        </tr>
+        @endforeach
+    </table>
+    <div class="modal fade" id="createClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -43,28 +66,6 @@
           </div>
         </div>
       </div>
-
-    <div id="alert" class="alert alert-success d-none">
-    </div>    
-   
-
-
-    <table id="clients-table" class="table table-striped">
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Description</th>
-        </tr>
-        @foreach ($clients as $client) 
-        <tr>
-            <td>{{$client->id}}</td>
-            <td>{{$client->name}}</td>
-            <td>{{$client->surname}}</td>
-            <td>{{$client->description}}</td>
-        </tr>
-        @endforeach
-    </table>
 </div>
 
 <script>
@@ -75,11 +76,12 @@
         }
     });
 
+    $("#close-client-create-modal").click(function() {
+            $("#createClientModal").hide();
+        });
     $(document).ready(function() {
 
-        $("#close-client-create-modal").click(function() {
-            $("#createClientModal").modal('hide')
-        });
+       
 
         console.log("Jquery veikia");
         $("#submit-ajax-form").click(function() {
