@@ -139,7 +139,19 @@
     </table>
 
   
-
+    <table class="template">
+        <tr>
+          <td class="col-client-id"></td>
+          <td class="col-client-name"></td>
+          <td class="col-client-surname"></td>
+          <td class="col-client-description"></td>
+          <td>
+            <button class="btn btn-danger delete-client" type="submit" data-clientid="">DELETE</button>
+            <button type="button" class="btn btn-primary show-client" data-bs-toggle="modal" data-bs-target="#showClientModal" data-clientid="">Show</button>
+            <button type="button" class="btn btn-secondary edit-client" data-bs-toggle="modal" data-bs-target="#editClientModal" data-clientid="">Edit</button>
+          </td>
+        </tr>  
+    </table>  
     
 </div>
 
@@ -158,6 +170,39 @@
           $('.client55').remove();
         });
 
+        function createRow(clientId, clientName, clientSurname, clientDescription ) {
+                    let html
+                    html += "<tr class='client"+clientId+"'>";
+                    html += "<td>"+clientId+"</td>";    
+                    html += "<td>"+clientName+"</td>";  
+                    html += "<td>"+clientSurname+"</td>";  
+                    html += "<td>"+clientDescription+"</td>";  
+                    html += "<td>";
+                    html +=  "<button class='btn btn-danger delete-client' type='submit' data-clientid='"+clientId+"'>DELETE</button>"; 
+                    html +=  "</td>";
+                    html += "</tr>";
+
+                   return html 
+        }
+
+        function createRowFromHtml(clientId, clientName, clientSurname, clientDescription) {
+          $(".template tr").addClass("client"+clientId);
+          $(".template .delete-client").attr('data-clientid', clientId );
+          $(".template .show-client").attr('data-clientid', clientId );
+          $(".template .edit-client").attr('data-clientid', clientId );
+          $(".template .col-client-id").html(clientId );
+          $(".template .col-client-name").html(clientName );
+          $(".template .col-client-surname").html(clientSurname );
+          $(".template .col-client-description").html(clientDescription );
+          
+          
+
+          // console.log($(".template tbody").html());
+
+          return $(".template tbody").html();
+        }
+
+    
         console.log("Jquery veikia");
         $("#submit-ajax-form").click(function() {
             let client_name;
@@ -182,9 +227,26 @@
                     //data kintamasis yra masyvas
                     // data.client_id
                     // data.client_name
-                   console.log(data);
+                    console.log(data);
+                    let html;
 
-                    let html =  "<tr class='client"+data.clientId+"'><td>"+data.clientId+"</td><td>"+data.clientName+"</td><td>"+data.clientSurname+"</td><td>"+data.clientDescription+"</td><td><button class='btn btn-danger delete-client' type='submit' data-clientid='"+data.clientId+"'>DELETE</button><button type='button' class='btn btn-primary show-client' data-bs-toggle='modal' data-bs-target='#showClientModal' data-clientid='"+data.clientId+"'>Show</button><button type='button' class='btn btn-secondary edit-client' data-bs-toggle='modal' data-bs-target='#editClientModal' data-clientid='"+data.clientId+"'>Edit</button></td></tr>";
+
+                    //1 variantas
+                    // html += "<tr class='client"+data.clientId+"'>";
+                    // html += "<td>"+data.clientId+"</td>";    
+                    // html += "<td>"+data.clientName+"</td>";  
+                    // html += "<td>"+data.clientSurname+"</td>";  
+                    // html += "<td>"+data.clientDescription+"</td>";  
+                    // html += "<td>";
+                    // html +=  "<button class='btn btn-danger delete-client' type='submit' data-clientid='"+data.clientId+"'>DELETE</button>"; 
+                    // html +=  "</td>";
+                    // html += "</tr>";
+
+
+                    // let html = "<tr class='client"+data.clientId+"'><td>"+data.clientId+"</td><td>"+data.clientName+"</td><td>"+data.clientSurname+"</td><td>"+data.clientDescription+"</td><td><button class='btn btn-danger delete-client' type='submit' data-clientid='"+data.clientId+"'>DELETE</button><button type='button' class='btn btn-primary show-client' data-bs-toggle='modal' data-bs-target='#showClientModal' data-clientid='"+data.clientId+"'>Show</button><button type='button' class='btn btn-secondary edit-client' data-bs-toggle='modal' data-bs-target='#editClientModal' data-clientid='"+data.clientId+"'>Edit</button></td></tr>";
+                    
+                    // html = createRow(data.clientId, data.clientName, data.clientSurname, data.clientDescription);
+                    html = createRowFromHtml(data.clientId, data.clientName, data.clientSurname, data.clientDescription);
                     $("#clients-table").append(html);
 
                     $("#createClientModal").hide();
