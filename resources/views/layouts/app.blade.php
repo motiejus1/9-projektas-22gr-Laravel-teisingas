@@ -82,5 +82,7 @@
             @yield('content')
         </main>
     </div>
+    @extends('components.modal'); 
+    {{-- //modal.blade.php --}}
 </body>
 </html>
