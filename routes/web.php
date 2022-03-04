@@ -26,6 +26,8 @@ Route::prefix('clients')->group(function() {
     Route::get('create', 'App\Http\Controllers\ClientController@create')->name('client.create');
     Route::post('store', 'App\Http\Controllers\ClientController@store')->name('client.store');
     Route::post('storeAjax', 'App\Http\Controllers\ClientController@storeAjax')->name('client.storeAjax');
+    Route::post('delete/{client}', 'App\Http\Controllers\ClientController@destroy')->name('client.destroy');
+    Route::post('deleteAjax/{client}', 'App\Http\Controllers\ClientController@destroyAjax')->name('client.destroyAjax');
     // Route::get('createvalidate', 'App\Http\Controllers\AuthorController@createvalidate')->name('author.createvalidate');
     // Route::post('storevalidate', 'App\Http\Controllers\AuthorController@storevalidate')->name('author.storevalidate');
     // Route::get('search', 'App\Http\Controllers\AuthorController@search')->name('author.search');

@@ -122,6 +122,21 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        $client->delete();
+        return redirect()->route("client.index");
+    }
+
+    public function destroyAjax(Client $client)
+    {
+        $client->delete();
+
+        $success_array = array(
+            'successMessage' => "Client deleted successfuly". $client->id,
+        );
+
+        // 
+        $json_response =response()->json($success_array);
+
+        return $json_response;
     }
 }
