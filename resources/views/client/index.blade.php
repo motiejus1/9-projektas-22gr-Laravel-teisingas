@@ -53,7 +53,7 @@
     </table>
 
   
-    <table class="template">
+    <table class="template d-none">
         <tr>
           <td class="col-client-id"></td>
           <td class="col-client-name"></td>

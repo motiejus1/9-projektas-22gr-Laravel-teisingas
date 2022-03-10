@@ -40,6 +40,6 @@ Route::prefix('companies')->group(function() {
     Route::get('', 'App\Http\Controllers\CompanyController@index')->name('company.index');
     Route::get('create', 'App\Http\Controllers\CompanyController@create')->name('company.create');
     Route::post('store', 'App\Http\Controllers\CompanyController@store')->name('company.store');
-    
+    Route::post('deleteAjax/{company}', 'App\Http\Controllers\CompanyController@destroyAjax')->name('company.destroyAjax');
 });
 

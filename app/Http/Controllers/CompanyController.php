@@ -27,8 +27,8 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view("company.create");
+    {   $companies = Company::all();
+        return view("company.create", ['companies' => $companies]);
     }
 
     /**
@@ -91,5 +91,28 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         //
+    }
+
+    public function destroyAjax(Company $company) {
+         // ar kompanija neturi klientu?
+        //neturi klientu, kompanija istrinima, generuojamas sekmes pranesimas
+        //turi klientu, neleisti kompanijos bandyti istrinti, ir istikro isvesti klaidos(errorMessage) pranesima
+
+        $clients_count = count($company->companyClients);
+        
+        if($clients_count > 0) {
+            $response_array = array(
+                'errorMessage' => "Company cannot be deleted because it has clients". $company->id,
+            );  
+        } else {
+            $company->delete();
+            $response_array = array(
+                'successMessage' => "Company deleted successfuly". $company->id,
+            );
+        }
+ 
+        $json_response =response()->json($response_array);
+
+        return $json_response;
     }
 }
