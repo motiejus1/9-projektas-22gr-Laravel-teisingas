@@ -142,7 +142,8 @@ class ClientController extends Controller
         $client->name = $request->client_name;
         $client->surname = $request->client_surname;
         $client->description = $request->client_description;
-    
+        $client->company_id = $request->client_company_id;
+
         $client->save();
 
         $client_array = array(
@@ -151,6 +152,8 @@ class ClientController extends Controller
             'clientName' => $client->name,
             'clientSurname' => $client->surname,
             'clientDescription' => $client->description,
+            'clientCompanyId' => $client->company_id,
+            'clientCompanyTitle' => $client->clientCompany->title
         );
 
         // 

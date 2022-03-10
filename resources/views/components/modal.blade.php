@@ -73,7 +73,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             {{-- <button id="close-client-create-modal" type="button" class="btn btn-secondary">Close with Javascript</button> --}}
-            <button id="update-client" type="button" class="btn btn-primary">Update</button>
+            <button id="update-client" type="button" class="btn btn-primary update-client">Update</button>
         </div>
       </div>
     </div>
