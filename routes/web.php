@@ -23,6 +23,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::prefix('clients')->group(function() {
     Route::get('', 'App\Http\Controllers\ClientController@index')->name('client.index');
+    Route::get('indexAjax', 'App\Http\Controllers\ClientController@indexAjax')->name('client.indexAjax');
     Route::get('create', 'App\Http\Controllers\ClientController@create')->name('client.create');
     Route::post('store', 'App\Http\Controllers\ClientController@store')->name('client.store');
     Route::post('storeAjax', 'App\Http\Controllers\ClientController@storeAjax')->name('client.storeAjax');

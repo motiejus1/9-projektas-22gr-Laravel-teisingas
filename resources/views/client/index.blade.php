@@ -6,6 +6,8 @@
 <div class="container">
 
 
+
+    <button id="clients-sort" type="button">Rikiuok pagal id mazejimo tvarka</button> 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClientModal">
       Create Client
@@ -25,9 +27,9 @@
 
     <table id="clients-table" class="table table-striped">
         <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Surname</th>
+            <th>@sortablelink('id')</th>
+            <th>@sortablelink('name')</th>
+            <th>@sortablelink('surname')</th>
             <th>Description</th>
             <th>Company</th>
             <th>Action</th>
@@ -287,6 +289,19 @@
             });
         })
 
+        $('#clients-sort').click(function() {
+          let sort = 'name';
+          let direction = 'asc';
+          $.ajax({
+                type: 'GET',// formoje method POST GET
+                url: '{{route("client.indexAjax")}}'  ,// formoje action
+                data: {sort: sort, direction: direction },
+                success: function(data) {
+                  console.log(data);
+
+                }
+            });
+        })
     })
 </script>
 

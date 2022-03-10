@@ -19,10 +19,25 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
+        $clients = Client::sortable()->get();
         $companies = Company::all();
 
         return view("client.index", ['clients'=>$clients, 'companies'=>$companies]);
+    }
+
+    public function indexAjax() {
+        $clients = Client::sortable()->get();
+
+        $json_response =response()->json($clients); //javascript masyva
+
+        // $html = "<tr><td>".$client->id."</td><td>".$client->name."</td><td>".$client->surname."</td><td>".$client->description."</td></tr>";
+        //kazkoki tai atsakyma
+        //  return $html;
+
+        //json masyvas/ objektu / javascrip asociatyvus masyvas
+        //php masyva => json masyva
+        // json masyva => php masyva
+        return $json_response;
     }
 
     /**
