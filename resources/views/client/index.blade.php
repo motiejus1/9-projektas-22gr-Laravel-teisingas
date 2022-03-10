@@ -29,6 +29,7 @@
             <th>Name</th>
             <th>Surname</th>
             <th>Description</th>
+            <th>Company</th>
             <th>Action</th>
         </tr>
         @foreach ($clients as $client) 
@@ -37,6 +38,7 @@
             <td class="col-client-name">{{$client->name}}</td>
             <td class="col-client-surname">{{$client->surname}}</td>
             <td class="col-client-description">{{$client->description}}</td>
+            <td class="col-client-company">{{$client->clientCompany->title}}</td>
             <td>
               {{-- <form action={{route("client.destroy",[$client])}} method="POST"> --}}
               
@@ -57,6 +59,7 @@
           <td class="col-client-name"></td>
           <td class="col-client-surname"></td>
           <td class="col-client-description"></td>
+          <td class="col-client-company"></td>
           <td>
             <button class="btn btn-danger delete-client" type="submit" data-clientid="">DELETE</button>
             <button type="button" class="btn btn-primary show-client" data-bs-toggle="modal" data-bs-target="#showClientModal" data-clientid="">Show</button>
@@ -102,7 +105,7 @@
                    return html 
         }
 
-        function createRowFromHtml(clientId, clientName, clientSurname, clientDescription) {
+        function createRowFromHtml(clientId, clientName, clientSurname, clientDescription, clientCompanyId) {
           $(".template tr").addClass("client"+clientId);
           $(".template .delete-client").attr('data-clientid', clientId );
           $(".template .show-client").attr('data-clientid', clientId );
@@ -111,11 +114,8 @@
           $(".template .col-client-name").html(clientName );
           $(".template .col-client-surname").html(clientSurname );
           $(".template .col-client-description").html(clientDescription );
-          
-          
-
-          // console.log($(".template tbody").html());
-
+          $(".template .col-client-company").html( clientCompanyId);
+    
           return $(".template tbody").html();
         }
 
@@ -125,17 +125,17 @@
             let client_name;
             let client_surname;
             let client_description;
+            let client_company_id;
 
             client_name = $('#client_name').val();
             client_surname = $('#client_surname').val();
             client_description = $('#client_description').val();
-
-            // console.log(client_name + " " + client_surname + " "  + client_description);
+            client_company_id = $('#client_company_id').val();
 
             $.ajax({
                 type: 'POST',// formoje method POST GET
                 url: '{{route("client.storeAjax")}}' ,// formoje action
-                data: {client_name: client_name, client_surname: client_surname, client_description: client_description  },
+                data: {client_name: client_name, client_surname: client_surname, client_description: client_description, client_company_id: client_company_id  },
                 success: function(data) {
                     //data kintamasis ir yra atsakymas
                     //i alerta turetu isivesti atsakymas
@@ -163,7 +163,7 @@
                     // let html = "<tr class='client"+data.clientId+"'><td>"+data.clientId+"</td><td>"+data.clientName+"</td><td>"+data.clientSurname+"</td><td>"+data.clientDescription+"</td><td><button class='btn btn-danger delete-client' type='submit' data-clientid='"+data.clientId+"'>DELETE</button><button type='button' class='btn btn-primary show-client' data-bs-toggle='modal' data-bs-target='#showClientModal' data-clientid='"+data.clientId+"'>Show</button><button type='button' class='btn btn-secondary edit-client' data-bs-toggle='modal' data-bs-target='#editClientModal' data-clientid='"+data.clientId+"'>Edit</button></td></tr>";
                     
                     // html = createRow(data.clientId, data.clientName, data.clientSurname, data.clientDescription);
-                    html = createRowFromHtml(data.clientId, data.clientName, data.clientSurname, data.clientDescription);
+                    html = createRowFromHtml(data.clientId, data.clientName, data.clientSurname, data.clientDescription, data.clientCompanyTitle);
                     $("#clients-table").append(html);
 
                     $("#createClientModal").hide();
@@ -222,6 +222,7 @@
                    $('.show-client-name').html(data.clientName);                   
                    $('.show-client-surname').html(data.clientSurname);                   
                    $('.show-client-description').html(data.clientDescription);                                  
+                   $('.show-client-company').html(data.clientCompanyTitle);                                  
                 }
             });
 
@@ -239,7 +240,11 @@
                   $('#edit_client_id').val(data.clientId);                   
                    $('#edit_client_name').val(data.clientName);                   
                    $('#edit_client_surname').val(data.clientSurname);                   
-                   $('#edit_client_description').val(data.clientDescription);                                  
+                   $('#edit_client_description').val(data.clientDescription);
+                   
+                   $('#edit_client_company_id option').removeAttr('selected');
+                   $('#edit_client_company_id').val(data.clientCompanyId);
+                   $('#edit_client_company_id .company'+ data.clientCompanyId).attr("selected", "selected");                                 
                 }
             });
 

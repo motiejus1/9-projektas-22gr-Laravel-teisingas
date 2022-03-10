@@ -19,6 +19,14 @@
                 <label for="client_description">Client Description</label>
                 <input id="client_description" class="form-control" type="text" name="client_description" />
             </div>
+            <div class="form-group">
+              <label for="client_description">Client Description</label>
+              <select id="client_company_id" class="form-select">
+                @foreach ($companies as $company)
+                  <option value="{{$company->id}}">{{$company->title}}</option>
+                @endforeach
+              </select>  
+            </div>
         </div> 
         </div>
         <div class="modal-footer">
@@ -52,6 +60,14 @@
                 <label for="client_description">Client Description</label>
                 <input id="edit_client_description" class="form-control" type="text" name="client_description" />
             </div>
+            <div class="form-group">
+              <label for="client_description">Client Company id</label>
+              <select id="edit_client_company_id" class="form-select">
+                @foreach ($companies as $company)
+                  <option class="company{{$company->id}}" value="{{$company->id}}">{{$company->title}}</option>
+                @endforeach
+              </select>  
+            </div>
         </div> 
         </div>
         <div class="modal-footer">
@@ -78,7 +94,10 @@
             <div class="show-client-surname">
             </div>  
             <div class="show-client-description">
-            </div>    
+            </div>
+            <label>Company</label>
+            <div class="show-client-company">
+            </div>     
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

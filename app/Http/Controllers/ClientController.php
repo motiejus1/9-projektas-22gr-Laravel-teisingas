@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Company;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 
@@ -19,7 +20,9 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::all();
-        return view("client.index", ['clients'=>$clients]);
+        $companies = Company::all();
+
+        return view("client.index", ['clients'=>$clients, 'companies'=>$companies]);
     }
 
     /**
@@ -56,8 +59,9 @@ class ClientController extends Controller
         $client->name = $request->client_name;
         $client->surname = $request->client_surname;
         $client->description = $request->client_description;
+        $client->company_id = $request->client_company_id;
     
-        $client->save();
+        $client->save();//po isaugojimo momento
 
         $client_array = array(
             'successMessage' => "Client stored succesfuly",
@@ -65,6 +69,8 @@ class ClientController extends Controller
             'clientName' => $client->name,
             'clientSurname' => $client->surname,
             'clientDescription' => $client->description,
+            'clientCompanyId' => $client->company_id,
+            'clientCompanyTitle' => $client->clientCompany->title
         );
 
         // 
@@ -98,6 +104,9 @@ class ClientController extends Controller
             'clientName' => $client->name,
             'clientSurname' => $client->surname,
             'clientDescription' => $client->description,
+            'clientCompanyId' => $client->company_id,
+            'clientCompanyTitle' => $client->clientCompany->title
+
         );
 
         $json_response =response()->json($client_array); 
