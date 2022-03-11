@@ -74,6 +74,7 @@ class ClientController extends Controller
 
     public function storeAjax(Request $request) {
 
+        
         $client = new Client;
         $client->name = $request->client_name;
         $client->surname = $request->client_surname;
@@ -82,6 +83,11 @@ class ClientController extends Controller
     
         $client->save();//po isaugojimo momento
 
+        $sort = $request->sort ;
+        $direction = $request->direction ;
+
+        $clients = Client::with("clientCompany")->sortable([$sort => $direction ])->get();
+
         $client_array = array(
             'successMessage' => "Client stored succesfuly",
             'clientId' => $client->id,
@@ -89,19 +95,11 @@ class ClientController extends Controller
             'clientSurname' => $client->surname,
             'clientDescription' => $client->description,
             'clientCompanyId' => $client->company_id,
-            'clientCompanyTitle' => $client->clientCompany->title
+            'clientCompanyTitle' => $client->clientCompany->title,
+            "clients" => $clients
         );
 
-        // 
-        $json_response =response()->json($client_array); //javascript masyva
-
-        // $html = "<tr><td>".$client->id."</td><td>".$client->name."</td><td>".$client->surname."</td><td>".$client->description."</td></tr>";
-        //kazkoki tai atsakyma
-        //  return $html;
-
-        //json masyvas/ objektu / javascrip asociatyvus masyvas
-        //php masyva => json masyva
-        // json masyva => php masyva
+        $json_response =response()->json($client_array); 
         return $json_response;
     }
 

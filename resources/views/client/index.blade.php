@@ -23,7 +23,10 @@ th div {
       Create Client
     </button>
 
-    
+    <input id="hidden-sort" type="hidden" value="id" />
+    <input id="hidden-direction" type="hidden" value="asc" />
+
+
 
     <button id="remove-table">Remove table</button>
 
@@ -147,45 +150,40 @@ th div {
             let client_surname;
             let client_description;
             let client_company_id;
+            let sort;
+            let direction;
 
             client_name = $('#client_name').val();
             client_surname = $('#client_surname').val();
             client_description = $('#client_description').val();
             client_company_id = $('#client_company_id').val();
+            sort = $('#hidden-sort').val();
+            direction = $('#hidden-direction').val();
 
             $.ajax({
                 type: 'POST',// formoje method POST GET
                 url: '{{route("client.storeAjax")}}' ,// formoje action
-                data: {client_name: client_name, client_surname: client_surname, client_description: client_description, client_company_id: client_company_id  },
+                data: {client_name: client_name, client_surname: client_surname, client_description: client_description, client_company_id: client_company_id, sort:sort, direction:direction  },
                 success: function(data) {
-                    //data kintamasis ir yra atsakymas
-                    //i alerta turetu isivesti atsakymas
-                    // $("#alert").html(data);
-
-                    //data kintamasis yra masyvas
-                    // data.client_id
-                    // data.client_name
                     console.log(data);
-                    let html;
-
-
-                    //1 variantas
-                    // html += "<tr class='client"+data.clientId+"'>";
-                    // html += "<td>"+data.clientId+"</td>";    
-                    // html += "<td>"+data.clientName+"</td>";  
-                    // html += "<td>"+data.clientSurname+"</td>";  
-                    // html += "<td>"+data.clientDescription+"</td>";  
-                    // html += "<td>";
-                    // html +=  "<button class='btn btn-danger delete-client' type='submit' data-clientid='"+data.clientId+"'>DELETE</button>"; 
-                    // html +=  "</td>";
-                    // html += "</tr>";
-
-
-                    // let html = "<tr class='client"+data.clientId+"'><td>"+data.clientId+"</td><td>"+data.clientName+"</td><td>"+data.clientSurname+"</td><td>"+data.clientDescription+"</td><td><button class='btn btn-danger delete-client' type='submit' data-clientid='"+data.clientId+"'>DELETE</button><button type='button' class='btn btn-primary show-client' data-bs-toggle='modal' data-bs-target='#showClientModal' data-clientid='"+data.clientId+"'>Show</button><button type='button' class='btn btn-secondary edit-client' data-bs-toggle='modal' data-bs-target='#editClientModal' data-clientid='"+data.clientId+"'>Edit</button></td></tr>";
                     
-                    // html = createRow(data.clientId, data.clientName, data.clientSurname, data.clientDescription);
-                    html = createRowFromHtml(data.clientId, data.clientName, data.clientSurname, data.clientDescription, data.clientCompanyTitle);
-                    $("#clients-table").append(html);
+                    
+                    //prideda i lenteles pabaiga nauja irasa. Ji mums perbraizys visa lentele pagal tai kaip viskas isrikiuota
+                    //clients - pakeisti controlleri
+                    
+                    $("#clients-table tbody").html('');
+                     $.each(data.clients, function(key, client) {
+                          let html;
+                          html = createRowFromHtml(client.id, client.name, client.surname, client.description, client.client_company.title);
+                          // console.log(html)
+                          $("#clients-table tbody").append(html);
+                     });
+                    
+                    
+                    // let html;
+
+                    // html = createRowFromHtml(data.clientId, data.clientName, data.clientSurname, data.clientDescription, data.clientCompanyTitle);
+                    // $("#clients-table").append(html);
 
                     $("#createClientModal").hide();
                     $('body').removeClass('modal-open');
@@ -314,6 +312,9 @@ th div {
 
           sort = $(this).attr('data-sort');
           direction = $(this).attr('data-direction');
+
+          $("#hidden-sort").val(sort);
+          $("#hidden-direction").val(direction);
 
           if(direction == 'asc') {
             $(this).attr('data-direction', 'desc');
