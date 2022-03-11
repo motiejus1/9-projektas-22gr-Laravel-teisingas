@@ -204,4 +204,32 @@ class ClientController extends Controller
 
         return $json_response;
     }
+
+    public function searchAjax(Request $request) {
+
+        $searchValue = $request->searchValue;
+
+        $clients = Client::query()
+        ->where('name', 'like', "%{$searchValue}%")
+        ->orWhere('surname', 'like', "%{$searchValue}%")
+        ->orWhere('description', 'like', "%{$searchValue}%")
+        ->get();
+
+        if(count($clients) > 0) {
+            $cliens_array = array(
+                'clients' => $clients
+            );
+        } else {
+            $cliens_array = array(
+                'errorMessage' => 'No clients found'
+            );
+        }
+
+        
+
+        $json_response =response()->json($cliens_array);
+
+        return $json_response;
+
+    }
 }

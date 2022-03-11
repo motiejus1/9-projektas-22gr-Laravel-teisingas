@@ -9,14 +9,7 @@ th div {
 
 </style>  
 <div class="container">
-
-
-
-    <button class="clients-sort" type="button" data-sort="id" data-direction="asc">Rikiuok pagal id</button> 
-    <button class="clients-sort" type="button" data-sort="name" data-direction="asc">Rikiuok pagal varda</button>
-    <button class="clients-sort" type="button" data-sort="surname" data-direction="asc">Rikiuok pagal pavarde</button> 
-    <button class="clients-sort" type="button" data-sort="description" data-direction="asc">Rikiuok pagal aprasyma</button>
-    <button class="clients-sort" type="button" data-sort="clientCompany.title" data-direction="asc">Rikiuok pagal kompanijos pavadinima</button> 
+ 
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClientModal">
@@ -27,18 +20,14 @@ th div {
     <input id="hidden-direction" type="hidden" value="asc" />
 
 
-
-    <button id="remove-table">Remove table</button>
-
-    <!-- Modal -->
-      
-      <!-- Modal -->
-      
-
     <div id="alert" class="alert alert-success d-none">
     </div>    
    
-
+    {{-- paieska --}}
+    <div class="searchAjaxForm">
+    <input id="searchValue" type="text">
+    <button type="button" id="submitSearch">Find</button>
+    </div>  
 
     <table id="clients-table" class="table table-striped">
       <thead>
@@ -304,7 +293,7 @@ th div {
 
                 }
             });
-        })
+        });
 
         $('.clients-sort').click(function() {
           let sort;
@@ -348,7 +337,43 @@ th div {
 
                 }
             });
-        })
+        });
+
+        $('#submitSearch').click(function() {
+          //input Search value turiu pasiimti reiksme
+          let searchValue = $('#searchValue').val();
+          console.log(searchValue);
+
+          $.ajax({
+                type: 'GET',
+                url: '{{route("client.searchAjax")}}'  ,
+                data: {searchValue: searchValue},
+                success: function(data) {
+
+
+                  if($.isEmptyObject(data.errorMessage)) {
+                    //sekmes atvejis
+                    $("#clients-table").show();
+                    $("#alert").addClass("d-none");
+                    $("#clients-table tbody").html('');
+                     $.each(data.clients, function(key, client) {
+                      //  $client->clientCompany->title
+                          let html;
+                          html = createRowFromHtml(client.id, client.name, client.surname, client.description, client.company_id);
+                          // console.log(html)
+                          $("#clients-table tbody").append(html);
+                     });                             
+                  } else {
+                        $("#clients-table").hide();
+                        $('#alert').removeClass('alert-success');
+                        $('#alert').addClass('alert-danger');
+                        $("#alert").removeClass("d-none");
+                        $("#alert").html(data.errorMessage); 
+                  }                            
+                }
+            });
+
+        });
     })
 </script>
 
