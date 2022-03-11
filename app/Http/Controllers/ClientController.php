@@ -18,7 +18,8 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
+        //sort ir direction
         $clients = Client::sortable()->get();
         $companies = Company::all();
 
@@ -26,17 +27,15 @@ class ClientController extends Controller
     }
 
     public function indexAjax() {
+
         $clients = Client::sortable()->get();
 
-        $json_response =response()->json($clients); //javascript masyva
+        $cliens_array = array(
+            'clients' => $clients
+        );
 
-        // $html = "<tr><td>".$client->id."</td><td>".$client->name."</td><td>".$client->surname."</td><td>".$client->description."</td></tr>";
-        //kazkoki tai atsakyma
-        //  return $html;
+        $json_response =response()->json($cliens_array); 
 
-        //json masyvas/ objektu / javascrip asociatyvus masyvas
-        //php masyva => json masyva
-        // json masyva => php masyva
         return $json_response;
     }
 

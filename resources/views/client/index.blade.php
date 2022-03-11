@@ -26,14 +26,17 @@
 
 
     <table id="clients-table" class="table table-striped">
+      <thead>
         <tr>
-            <th>@sortablelink('id')</th>
-            <th>@sortablelink('name')</th>
-            <th>@sortablelink('surname')</th>
-            <th>Description</th>
-            <th>Company</th>
-            <th>Action</th>
-        </tr>
+          <th>@sortablelink('id')</th>
+          <th>@sortablelink('name')</th>
+          <th>@sortablelink('surname')</th>
+          <th>Description</th>
+          <th>Company</th>
+          <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
         @foreach ($clients as $client) 
         <tr class="client{{$client->id}}">
             <td class="col-client-id">{{$client->id}}</td>
@@ -52,6 +55,9 @@
             </td>
         </tr>
         @endforeach
+      </tbody>   
+        
+       
     </table>
 
   
@@ -108,6 +114,7 @@
         }
 
         function createRowFromHtml(clientId, clientName, clientSurname, clientDescription, clientCompanyId) {
+          $(".template tr").removeAttr("class");
           $(".template tr").addClass("client"+clientId);
           $(".template .delete-client").attr('data-clientid', clientId );
           $(".template .show-client").attr('data-clientid', clientId );
@@ -290,14 +297,29 @@
         })
 
         $('#clients-sort').click(function() {
-          let sort = 'name';
-          let direction = 'asc';
+          let sort = 'id';
+          let direction = 'desc';
           $.ajax({
                 type: 'GET',// formoje method POST GET
                 url: '{{route("client.indexAjax")}}'  ,// formoje action
                 data: {sort: sort, direction: direction },
                 success: function(data) {
-                  console.log(data);
+                  // data
+                  console.log(data.clients);
+                  //perbraizysiu lentele
+                    //ciklo kuris pereina per visa masyva
+                    //kiekvienos ciklo iteracijos metu mes tiesiog turime klienta prikabinti prie tbody tago
+                    // foreach $clients as $client
+                    $("#clients-table tbody").html('');
+                     $.each(data.clients, function(key, client) {
+                          let html;
+                          html = createRowFromHtml(client.id, client.name, client.surname, client.description, client.company_id);
+                          // console.log(html)
+                          $("#clients-table tbody").append(html);
+                     });
+
+
+                  //mygtuku rikiavimui
 
                 }
             });
