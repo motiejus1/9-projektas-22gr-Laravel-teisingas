@@ -9,23 +9,32 @@
           <div class="ajaxForm">
             <div class="form-group">
                 <label for="client_name">Client Name</label>
-                <input id="client_name" class="form-control" type="text" name="client_name" />
-            </div>
+                {{-- is-invalid ant inputo --}}
+                <input id="client_name" class="form-control create-input" type="text" name="client_name" />
+                
+                <span class="invalid-feedback input_client_name">
+                </span>
+              </div>
             <div class="form-group">
                 <label for="client_surname">Client Surname</label>
-                <input id="client_surname" class="form-control" type="text" name="client_surname" />
+                <input id="client_surname" class="form-control create-input" type="text" name="client_surname" />
+                <span class="invalid-feedback input_client_surname">
+                </span>
             </div>
             <div class="form-group">
                 <label for="client_description">Client Description</label>
-                <input id="client_description" class="form-control" type="text" name="client_description" />
+                <input id="client_description" class="form-control create-input" type="text" name="client_description" />
+                <span class="invalid-feedback input_client_description">
+                </span>  
             </div>
             <div class="form-group">
-              <label for="client_description">Client Description</label>
-              <select id="client_company_id" class="form-select">
+              <label for="client_company_id">Client Company</label>
+              <select id="client_company_id" class="form-select create-input">
                 @foreach ($companies as $company)
                   <option value="{{$company->id}}">{{$company->title}}</option>
                 @endforeach
-              </select>  
+              </select>
+              <span class="invalid-feedback input_client_company_id"> </span> 
             </div>
         </div> 
         </div>

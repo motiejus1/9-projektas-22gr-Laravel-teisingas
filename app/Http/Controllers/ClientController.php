@@ -8,6 +8,7 @@ use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 
 use Illuminate\Http\Request;
+use Validator;
 
 
 class ClientController extends Controller
@@ -75,29 +76,73 @@ class ClientController extends Controller
     public function storeAjax(Request $request) {
 
         
-        $client = new Client;
-        $client->name = $request->client_name;
-        $client->surname = $request->client_surname;
-        $client->description = $request->client_description;
-        $client->company_id = $request->client_company_id;
-    
-        $client->save();//po isaugojimo momento
+        // $request->validate([
+        //     'client_name'=> 'required',
+        //     'client_surname'=> 'required',
+        //     'client_description'=> 'required',
+        //     'client_company_id'=> 'required',
+        // ]);
+        //funbkcija  mes nenutrauktume
+        //grazinti klaidos json_response
 
-        $sort = $request->sort ;
-        $direction = $request->direction ;
+        //sitoje vietoje ir nutrauks funkcija
+        $input = [
+            'client_name'=> $request->client_name,
+            'client_surname'=> $request->client_surname,
+            'client_description'=> $request->client_description,
+            'client_company_id'=> $request->client_description,
+        ];
 
-        $clients = Client::with("clientCompany")->sortable([$sort => $direction ])->get();
+        $rules = [
+            'client_name'=> 'required',
+            'client_surname'=> 'required',
+            'client_description'=> 'required',
+            'client_company_id'=> 'required',
+        ];
 
-        $client_array = array(
-            'successMessage' => "Client stored succesfuly",
-            'clientId' => $client->id,
-            'clientName' => $client->name,
-            'clientSurname' => $client->surname,
-            'clientDescription' => $client->description,
-            'clientCompanyId' => $client->company_id,
-            'clientCompanyTitle' => $client->clientCompany->title,
-            "clients" => $clients
-        );
+        $customMessages = [
+            'required' => "This field is required"
+        ];
+
+        
+        $validator = Validator::make($input, $rules); // 3 funckijos argumentas neprivalomas
+
+        //tikrina ar validatorius nepraejo
+        if($validator->fails()) {
+
+            //zinuciu masyva, kuriose surasyta viskas, kas negerai
+            //atvaizduoti zinuciu masyva prie kiekvieno input laukelio
+            $errors = $validator->messages()->get('*'); //pasiima visu ivykusiu klaidu sarasa
+            $client_array = array(
+                'errorMessage' => "validator fails",
+                'errors' => $errors
+            );
+        } else {
+
+            $client = new Client;
+            $client->name = $request->client_name;
+            $client->surname = $request->client_surname;
+            $client->description = $request->client_description;
+            $client->company_id = $request->client_company_id;
+        
+            $client->save();//po isaugojimo momento
+
+            $sort = $request->sort ;
+            $direction = $request->direction ;
+
+            $clients = Client::with("clientCompany")->sortable([$sort => $direction ])->get();
+
+            $client_array = array(
+                'successMessage' => "Client stored succesfuly",
+                'clientId' => $client->id,
+                'clientName' => $client->name,
+                'clientSurname' => $client->surname,
+                'clientDescription' => $client->description,
+                'clientCompanyId' => $client->company_id,
+                'clientCompanyTitle' => $client->clientCompany->title,
+                "clients" => $clients
+            );
+    }
 
         $json_response =response()->json($client_array); 
         return $json_response;

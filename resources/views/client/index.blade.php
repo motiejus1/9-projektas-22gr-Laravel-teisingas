@@ -19,7 +19,6 @@ th div {
     <input id="hidden-sort" type="hidden" value="id" />
     <input id="hidden-direction" type="hidden" value="asc" />
 
-
     <div id="alert" class="alert alert-success d-none">
     </div>    
    
@@ -157,23 +156,15 @@ th div {
                 success: function(data) {
                     console.log(data);
                     
-                    
-                    //prideda i lenteles pabaiga nauja irasa. Ji mums perbraizys visa lentele pagal tai kaip viskas isrikiuota
-                    //clients - pakeisti controlleri
-                    
-                    $("#clients-table tbody").html('');
+                    if($.isEmptyObject(data.errorMessage)) {
+                      //sekmes atvejis
+                      $("#clients-table tbody").html('');
                      $.each(data.clients, function(key, client) {
                           let html;
                           html = createRowFromHtml(client.id, client.name, client.surname, client.description, client.client_company.title);
                           // console.log(html)
                           $("#clients-table tbody").append(html);
                      });
-                    
-                    
-                    // let html;
-
-                    // html = createRowFromHtml(data.clientId, data.clientName, data.clientSurname, data.clientDescription, data.clientCompanyTitle);
-                    // $("#clients-table").append(html);
 
                     $("#createClientModal").hide();
                     $('body').removeClass('modal-open');
@@ -186,6 +177,23 @@ th div {
                     $('#client_name').val('');
                     $('#client_surname').val('');
                     $('#client_description').val('');
+                    } else {
+                      console.log(data.errorMessage);
+                      console.log(data.errors);
+                      $('.create-input').removeClass('is-invalid');
+                      $('.invalid-feedback').html('');
+
+                      $.each(data.errors, function(key, error) {
+                        console.log(key);//key = input id
+                        $('#'+key).addClass('is-invalid');
+                        $('.input_'+key).html("<strong>"+error+"</strong>");
+                      });
+                    }
+                    
+                    //prideda i lenteles pabaiga nauja irasa. Ji mums perbraizys visa lentele pagal tai kaip viskas isrikiuota
+                    //clients - pakeisti controlleri
+                    
+                    
 
                     
                 }
