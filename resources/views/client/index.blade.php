@@ -2,16 +2,28 @@
 
 @section('content')
 
+<style>
+th div {
+  cursor: pointer;
+}
 
+</style>  
 <div class="container">
 
 
 
-    <button id="clients-sort" type="button">Rikiuok pagal id mazejimo tvarka</button> 
+    <button class="clients-sort" type="button" data-sort="id" data-direction="asc">Rikiuok pagal id</button> 
+    <button class="clients-sort" type="button" data-sort="name" data-direction="asc">Rikiuok pagal varda</button>
+    <button class="clients-sort" type="button" data-sort="surname" data-direction="asc">Rikiuok pagal pavarde</button> 
+    <button class="clients-sort" type="button" data-sort="description" data-direction="asc">Rikiuok pagal aprasyma</button>
+    <button class="clients-sort" type="button" data-sort="clientCompany.title" data-direction="asc">Rikiuok pagal kompanijos pavadinima</button> 
+
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClientModal">
       Create Client
     </button>
+
+    
 
     <button id="remove-table">Remove table</button>
 
@@ -28,12 +40,12 @@
     <table id="clients-table" class="table table-striped">
       <thead>
         <tr>
-          <th>@sortablelink('id')</th>
-          <th>@sortablelink('name')</th>
-          <th>@sortablelink('surname')</th>
-          <th>Description</th>
-          <th>Company</th>
-          <th>Action</th>
+          <th><div class="clients-sort" data-sort="id" data-direction="asc">ID</div></th>
+          <th><div class="clients-sort"  data-sort="name" data-direction="asc">Name</div></th>
+          <th><div class="clients-sort"  data-sort="surname" data-direction="asc">Surname</div></th>
+          <th><div class="clients-sort" data-sort="description" data-direction="asc">Description</div></th>
+          <th><div class="clients-sort"  data-sort="clientCompany.title" data-direction="asc">Company</div></th>
+          <th>Actions</th>
       </tr>
       </thead>
       <tbody>
@@ -296,9 +308,20 @@
             });
         })
 
-        $('#clients-sort').click(function() {
-          let sort = 'id';
-          let direction = 'desc';
+        $('.clients-sort').click(function() {
+          let sort;
+          let direction;
+
+          sort = $(this).attr('data-sort');
+          direction = $(this).attr('data-direction');
+
+          if(direction == 'asc') {
+            $(this).attr('data-direction', 'desc');
+          } else {
+            $(this).attr('data-direction', 'asc');
+          }
+
+
           $.ajax({
                 type: 'GET',// formoje method POST GET
                 url: '{{route("client.indexAjax")}}'  ,// formoje action
