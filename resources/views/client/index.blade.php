@@ -26,7 +26,8 @@ th div {
     {{-- paieska --}}
     <div class="searchAjaxForm">
     <input id="searchValue" type="text">
-    <button type="button" id="submitSearch">Find</button>
+    <span class="search-feedback"></span>
+    {{-- <button type="button" id="submitSearch">Find</button> --}}
     </div>  
 
     <table id="clients-table" class="table table-striped">
@@ -339,9 +340,25 @@ th div {
             });
         });
 
-        $('#submitSearch').click(function() {
+        // $('#submitSearch').click(function() {
+          $(document).on('input', '#searchValue', function() {
           //input Search value turiu pasiimti reiksme
           let searchValue = $('#searchValue').val();
+          //paieskos reiksme negali buti tuscia ir trumpesne nei 3 simboliai
+          let searchFieldCount= searchValue.length;
+
+          if(searchFieldCount == 0) {
+            console.log("Field is empty");
+            $(".search-feedback").css('display', 'block');
+            $(".search-feedback").html("Field is empty");
+          } else if (searchFieldCount != 0 && searchFieldCount< 3 ) {
+            console.log("Min 3");
+            $(".search-feedback").css('display', 'block');
+            $(".search-feedback").html("Min 3");
+          } else {
+            $(".search-feedback").css('display', 'none');
+          console.log(searchFieldCount);
+
           console.log(searchValue);
 
           $.ajax({
@@ -372,6 +389,7 @@ th div {
                   }                            
                 }
             });
+          }
 
         });
     })
